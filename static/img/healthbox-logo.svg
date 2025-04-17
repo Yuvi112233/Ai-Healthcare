@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="50px" viewBox="0 0 200 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="primaryGradient">
+            <stop stop-color="#1a73e8" offset="0%"></stop>
+            <stop stop-color="#6c5ce7" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(10, 5)">
+            <!-- Medical Cross in a Box -->
+            <rect x="0" y="0" width="40" height="40" rx="8" fill="url(#primaryGradient)"/>
+            <rect x="12" y="8" width="16" height="24" rx="2" fill="white"/>
+            <rect x="8" y="12" width="24" height="16" rx="2" fill="white"/>
+            
+            <!-- Text -->
+            <text x="50" y="27" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="white">
+                HealthBox
+            </text>
+        </g>
+    </g>
+</svg>

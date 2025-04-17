@@ -1,0 +1,93 @@
+/* Global Styles */
+:root {
+    --primary-gradient: linear-gradient(135deg, #1a73e8, #6c5ce7);
+    --secondary-gradient: linear-gradient(135deg, #20bf6b, #0bb197);
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--bs-dark);
+    color: #fff;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    border: none;
+}
+
+.btn-success {
+    background: var(--secondary-gradient);
+    border: none;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+}
+
+.text-gradient {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Helper Classes */
+.border-light {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Page transitions */
+.page-transition {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Mobile responsiveness adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        height: 100vh;
+        width: 250px;
+        z-index: 1000;
+        transition: left 0.3s ease;
+    }
+    
+    .sidebar.show {
+        left: 0;
+    }
+    
+    .sidebar-toggle {
+        display: block;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1001;
+        background-color: var(--bs-dark);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        text-decoration: none;
+    }
+}

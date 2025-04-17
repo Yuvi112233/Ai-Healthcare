@@ -1,0 +1,855 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - HealthBox{% endblock %}
+
+{% block head %}
+<style>
+    .sidebar {
+        background-color: var(--bs-dark);
+        min-height: 100vh;
+        padding: 20px 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar-brand {
+        padding: 0 20px 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+    }
+    
+    .sidebar-brand img {
+        max-height: 35px;
+        margin-right: 10px;
+    }
+    
+    .sidebar-brand h5 {
+        margin: 0;
+        font-weight: 600;
+    }
+    
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .sidebar-menu li {
+        margin-bottom: 5px;
+    }
+    
+    .sidebar-menu a {
+        display: block;
+        padding: 10px 20px;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+    
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+    }
+    
+    .sidebar-menu a i {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+    }
+    
+    .user-profile {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 20px;
+    }
+    
+    .user-profile .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--bs-primary);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        font-weight: 600;
+    }
+    
+    .user-info {
+        flex: 1;
+    }
+    
+    .user-info h6 {
+        margin: 0;
+        font-weight: 600;
+    }
+    
+    .user-info p {
+        margin: 0;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    /* Chat container */
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+    }
+    
+    .chat-header {
+        padding: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .chat-body {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+    }
+    
+    .chat-footer {
+        padding: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Messages */
+    .message {
+        display: flex;
+        margin-bottom: 20px;
+        align-items: flex-start;
+        max-width: 80%;
+    }
+    
+    .message.user-message {
+        margin-left: auto;
+        flex-direction: row-reverse;
+    }
+    
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 15px;
+    }
+    
+    .user-avatar {
+        background-color: var(--bs-primary);
+        color: #fff;
+        font-weight: 600;
+    }
+    
+    .ai-avatar {
+        background: var(--secondary-gradient);
+    }
+    
+    .ai-avatar img {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .message-content {
+        background-color: var(--bs-dark);
+        padding: 15px;
+        border-radius: 15px;
+        position: relative;
+    }
+    
+    .user-message .message-content {
+        background: var(--primary-gradient);
+        color: #fff;
+        border-top-right-radius: 0;
+    }
+    
+    .ai-message .message-content {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-top-left-radius: 0;
+    }
+    
+    .message-time {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 5px;
+        text-align: right;
+    }
+    
+    /* Message input */
+    .message-input {
+        display: flex;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 30px;
+        padding: 5px 5px 5px 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .message-input input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        padding: 10px 0;
+        color: #fff;
+    }
+    
+    .message-input input:focus {
+        outline: none;
+    }
+    
+    .send-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary-gradient);
+        border: none;
+        color: #fff;
+        cursor: pointer;
+    }
+    
+    /* Suggestions */
+    .suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .suggestion {
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .suggestion:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: var(--bs-primary);
+    }
+    
+    /* Diagnosis card */
+    .diagnosis-card {
+        margin-top: 20px;
+        background-color: var(--bs-dark);
+        border-radius: 10px;
+        overflow: hidden;
+        animation: fadeIn 0.5s ease;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .diagnosis-header {
+        padding: 20px;
+        background: #22c55e; /* Green background as shown in the image */
+        color: #fff;
+    }
+    
+    .diagnosis-body {
+        padding: 20px;
+        color: #fff;
+    }
+    
+    .diagnosis-item {
+        margin-bottom: 20px;
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .diagnosis-item:last-child {
+        border-bottom: none;
+    }
+    
+    .diagnosis-item h6 {
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    
+    .diagnosis-item p {
+        margin-bottom: 0;
+        color: #fff;
+    }
+    
+    .diagnosis-footer {
+        padding: 15px 20px;
+        background-color: rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .diagnosis-footer button {
+        background: transparent;
+        border: none;
+        color: var(--bs-primary);
+        font-size: 14px;
+        cursor: pointer;
+        padding: 0;
+    }
+    
+    .list-items {
+        padding-left: 20px;
+        margin-bottom: 0;
+    }
+    
+    .list-items li {
+        margin-bottom: 5px;
+    }
+    
+    /* Typing indicator */
+    .typing-indicator {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        margin-top: 10px;
+        width: fit-content;
+    }
+    
+    .typing-indicator span {
+        width: 8px;
+        height: 8px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        display: inline-block;
+        margin: 0 2px;
+        animation: typing 1.2s infinite ease-in-out;
+    }
+    
+    .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    
+    @keyframes typing {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .message {
+            max-width: 95%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+<div class="col-auto px-0">
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <img src="{{ url_for('static', filename='img/healthbox-logo.svg') }}" alt="HealthBox Logo">
+            <h5>HealthBox</h5>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{{ url_for('dashboard') }}" class="active">
+                    <i class="fas fa-comment-dots"></i> Chat Diagnosis
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('mental_health_diagnosis') }}">
+                    <i class="fas fa-brain"></i> Mental Health Diagnosis
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('history') }}" class="btn btn-sm btn-outline-success">
+                    <i class="fas fa-history"></i> Diagnosis History
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('profile') }}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('logout') }}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </li>
+        </ul>
+        
+        
+        <div class="user-profile mt-auto">
+            <div class="avatar">
+                {{ current_user.name[:1] }}
+            </div>
+            <div class="user-info">
+                <h6>{{ current_user.name }}</h6>
+                <p>{{ current_user.email }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header">
+        <h4>AI Health Assistant</h4>
+        <p class="text-muted mb-0">Tell me about your symptoms, and I'll help assess your condition.</p>
+    </div>
+    
+    <div class="chat-body" id="chatBody">
+        <!-- Welcome message -->
+        <div class="message ai-message">
+            <div class="message-avatar ai-avatar">
+                <img src="{{ url_for('static', filename='img/bot-icon.svg') }}" alt="AI">
+            </div>
+            <div class="message-content">
+                <p>Hello {{ current_user.name }}, I'm your AI health assistant. I can help diagnose your condition based on symptoms you describe. How are you feeling today?</p>
+                <div class="message-time">{{ now.strftime('%I:%M %p') }}</div>
+            </div>
+        </div>
+        
+        <!-- Chat messages -->
+        {% for message in messages %}
+            <div class="message {% if message.sender == 'user' %}user-message{% else %}ai-message{% endif %}">
+                {% if message.sender == 'user' %}
+                    <div class="message-avatar user-avatar">
+                        {{ current_user.name[:1] }}
+                    </div>
+                {% else %}
+                    <div class="message-avatar ai-avatar">
+                        <img src="{{ url_for('static', filename='img/bot-icon.svg') }}" alt="AI">
+                    </div>
+                {% endif %}
+                
+                <div class="message-content">
+                    <p>{{ message.content }}</p>
+                    <div class="message-time">{{ message.timestamp.isoformat() }}</div>
+                </div>
+            </div>
+        {% endfor %}
+        
+        <!-- Typing indicator (hidden by default) -->
+        <div class="typing-indicator" id="typingIndicator" style="display: none;">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <!-- Diagnosis card (added dynamically via JavaScript) -->
+        <div id="diagnosisCard" style="display: none;"></div>
+    </div>
+    
+    <div class="chat-footer">
+        <form id="messageForm">
+            <div class="message-input">
+                <input type="text" id="messageInput" placeholder="Type your symptoms here..." autocomplete="off">
+                <button type="submit" class="send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </form>
+        
+        <!-- Symptom suggestions -->
+        <div class="suggestions">
+            {% for symptom in common_symptoms %}
+                <div class="suggestion" onclick="addToInput('{{ symptom }}')">{{ symptom }}</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Function to scroll chat to bottom
+    function scrollToBottom() {
+        const chatBody = document.getElementById('chatBody');
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+    
+    // Function to add suggestion to input
+    function addToInput(text) {
+        const input = document.getElementById('messageInput');
+        input.value = text;
+        input.focus();
+    }
+    
+    // Function to show typing indicator
+    function showTypingIndicator() {
+        document.getElementById('typingIndicator').style.display = 'flex';
+        scrollToBottom();
+    }
+    
+    // Function to hide typing indicator
+    function hideTypingIndicator() {
+        document.getElementById('typingIndicator').style.display = 'none';
+    }
+    
+    // Function to add a message to the chat
+function addMessage(content, sender, timestamp) {
+    const chatBody = document.getElementById('chatBody');
+    const messageDiv = document.createElement('div');
+    
+    let formattedTime;
+    try {
+        const toIST = (date) => {
+            const utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+            const istTime = new Date(utc + (5.5 * 60 * 60 * 1000));
+            return istTime.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+        };
+
+        if (timestamp) {
+            if (typeof timestamp === 'string' && /^\d{1,2}:\d{2}\s?(AM|PM)$/i.test(timestamp)) {
+                formattedTime = timestamp;
+            } else if (typeof timestamp === 'string' && timestamp.includes(':') && 
+                      (timestamp.toUpperCase().includes('AM') || timestamp.toUpperCase().includes('PM'))) {
+                const timeMatch = timestamp.match(/(\d{1,2}):(\d{2})\s?(AM|PM|am|pm)/i);
+                if (timeMatch) {
+                    const hours = parseInt(timeMatch[1]);
+                    const minutes = parseInt(timeMatch[2]);
+                    const isPM = timeMatch[3].toUpperCase() === 'PM';
+                    const today = new Date();
+                    today.setHours(isPM && hours < 12 ? hours + 12 : (isPM ? hours : hours % 12));
+                    today.setMinutes(minutes);
+                    today.setSeconds(0);
+                    formattedTime = toIST(today);
+                } else {
+                    formattedTime = toIST(new Date());
+                }
+            } else {
+                const date = typeof timestamp === 'string' ? new Date(timestamp) : timestamp;
+                if (!isNaN(date.getTime())) {
+                    formattedTime = toIST(date);
+                } else {
+                    formattedTime = toIST(new Date());
+                }
+            }
+        } else {
+            formattedTime = toIST(new Date());
+        }
+    } catch (e) {
+        console.error('Error formatting date:', e);
+        formattedTime = toIST(new Date());
+    }
+    
+    // Check if this is a diagnosis message by looking for multiple section headers
+    const isDiagnosis = sender === 'ai' && (
+        content.includes("Cause:") &&
+        content.includes("Precautions:") &&
+        content.includes("Recommended medications:") &&
+        content.includes("Suggested workouts:") &&
+        content.includes("Dietary recommendations:")
+    );
+    
+    if (isDiagnosis) {
+        console.log("Processing diagnosis message");
+        const diagnosisCard = document.createElement('div');
+        diagnosisCard.className = 'message ai-message';
+        
+        // Extract the disease name from the first line
+        let diseaseName = "Unknown"; // Default if not found
+        const diseaseMatch = content.match(/I believe you may have\s*([^\.\n]+)/i);
+        if (diseaseMatch) {
+            diseaseName = diseaseMatch[1].trim();
+        }
+        console.log("Detected disease:", diseaseName);
+        
+        // Parse sections from the message
+        const sections = content.split('\n\n');
+        console.log("Found sections:", sections.length);
+        
+        let causeContent = '';
+        let precautionsHtml = '';
+        let medicationsHtml = '';
+        let workoutsHtml = '';
+        let dietHtml = '';
+        
+        for (let i = 1; i < sections.length; i++) {
+            const section = sections[i].trim();
+            if (section === '') continue;
+            
+            if (section.includes("MEDICAL DISCLAIMER")) {
+                continue;
+            }
+            
+            console.log("Processing section:", section.split('\n')[0]);
+            
+            if (section.startsWith("Cause:")) {
+                causeContent = section.replace("Cause:", "").trim();
+            } else if (section.startsWith("Precautions:")) {
+                const bulletPoints = section.split('\n').slice(1).filter(line => line.trim().startsWith('-'));
+                precautionsHtml = bulletPoints.length > 0 ? '<ul class="list-items">' + bulletPoints.map(line => '<li>' + line.replace('-', '').trim() + '</li>').join('') + '</ul>' : '<p>No specific precautions recommended.</p>';
+            } else if (section.startsWith("Recommended medications:")) {
+                const bulletPoints = section.split('\n').slice(1).filter(line => line.trim().startsWith('-'));
+                medicationsHtml = bulletPoints.length > 0 ? '<ul class="list-items">' + bulletPoints.map(line => '<li>' + line.replace('-', '').trim() + '</li>').join('') + '</ul>' : '<p>No specific medications recommended.</p>';
+            } else if (section.startsWith("Suggested workouts:")) {
+                const bulletPoints = section.split('\n').slice(1).filter(line => line.trim().startsWith('-'));
+                workoutsHtml = bulletPoints.length > 0 ? '<ul class="list-items">' + bulletPoints.map(line => '<li>' + line.replace('-', '').trim() + '</li>').join('') + '</ul>' : '<p>No specific workouts recommended.</p>';
+            } else if (section.startsWith("Dietary recommendations:")) {
+                const bulletPoints = section.split('\n').slice(1).filter(line => line.trim().startsWith('-'));
+                dietHtml = bulletPoints.length > 0 ? '<ul class="list-items">' + bulletPoints.map(line => '<li>' + line.replace('-', '').trim() + '</li>').join('') + '</ul>' : '<p>No specific diet recommendations.</p>';
+            }
+        }
+        
+        // Fallback for missing sections
+        if (!causeContent) causeContent = "The cause could not be determined based on the provided input.";
+        if (!precautionsHtml) precautionsHtml = '<ul class="list-items"><li>Consult a healthcare professional</li></ul>';
+        if (!medicationsHtml) medicationsHtml = '<ul class="list-items"><li>Do NOT self-medicate</li></ul>';
+        if (!workoutsHtml) workoutsHtml = '<ul class="list-items"><li>Gentle stretching</li></ul>';
+        if (!dietHtml) dietHtml = '<ul class="list-items"><li>Balanced diet</li></ul>';
+        
+        // Format diagnosis HTML
+        let diagnosisHTML = 
+            '<div class="message-avatar ai-avatar">' +
+                '<img src="{{ url_for("static", filename="img/bot-icon.svg") }}" alt="AI">' +
+            '</div>' +
+            '<div class="message-content" style="padding: 0; overflow: hidden; width: 100%;">' +
+                '<div class="diagnosis-card" style="margin: 0; border: none;">' +
+                    '<div class="diagnosis-header" style="background: #22c55e;">' +
+                        '<h5 class="mb-1">' + diseaseName + '</h5>' +
+                        '<p class="mb-0 text-white-50">Diagnosed on ' + formattedTime + '</p>' +
+                    '</div>' +
+                    '<div class="diagnosis-body">' +
+                        '<div class="diagnosis-item">' +
+                            '<h6>CAUSE</h6>' +
+                            '<p>' + causeContent + '</p>' +
+                        '</div>' +
+                        '<div class="diagnosis-item">' +
+                            '<h6>PRECAUTIONS</h6>' +
+                            precautionsHtml +
+                        '</div>' +
+                        '<div class="row">' +
+                            '<div class="col-md-6">' +
+                                '<div class="diagnosis-item">' +
+                                    '<h6>RECOMMENDED MEDICATIONS</h6>' +
+                                    medicationsHtml +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="col-md-6">' +
+                                '<div class="diagnosis-item">' +
+                                    '<h6>RECOMMENDED DIET</h6>' +
+                                    dietHtml +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="diagnosis-item mb-0">' +
+                            '<h6>RECOMMENDED ACTIVITIES</h6>' +
+                            workoutsHtml +
+                        '</div>' +
+                        '<div class="diagnosis-item" style="margin-bottom: 0;">' +
+                            '<p class="text-warning">⚠️ MEDICAL DISCLAIMER: This is not a professional medical diagnosis. Always consult with a healthcare professional for proper diagnosis and treatment.</p>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        
+        diagnosisCard.innerHTML = diagnosisHTML;
+        chatBody.appendChild(diagnosisCard);
+    } else {
+        // Regular message
+        messageDiv.className = 'message ' + (sender === 'user' ? 'user-message' : 'ai-message');
+        
+        let avatar = '';
+        if (sender === 'user') {
+            avatar = '<div class="message-avatar user-avatar">{{ current_user.name[:1] }}</div>';
+        } else {
+            avatar = '<div class="message-avatar ai-avatar"><img src="{{ url_for("static", filename="img/bot-icon.svg") }}" alt="AI"></div>';
+        }
+        
+        messageDiv.innerHTML = avatar +
+            '<div class="message-content">' +
+                '<p>' + content + '</p>' +
+                '<div class="message-time">' + formattedTime + '</div>' +
+            '</div>';
+        
+        chatBody.appendChild(messageDiv);
+    }
+    
+    scrollToBottom();
+}
+
+    // Function to display diagnosis card
+    function showDiagnosis(diagnosis) {
+        const diagnosisCard = document.getElementById('diagnosisCard');
+        
+        let precautionsHtml = '';
+        if (diagnosis.precautions && diagnosis.precautions.length > 0) {
+            precautionsHtml = '<ul class="list-items">';
+            for (let i = 0; i < diagnosis.precautions.length; i++) {
+                precautionsHtml += '<li>' + diagnosis.precautions[i] + '</li>';
+            }
+            precautionsHtml += '</ul>';
+        } else {
+            precautionsHtml = '<p>No specific precautions recommended.</p>';
+        }
+        
+        let medicationsHtml = '';
+        if (diagnosis.medications && diagnosis.medications.length > 0) {
+            medicationsHtml = '<ul class="list-items">';
+            for (let i = 0; i < diagnosis.medications.length; i++) {
+                medicationsHtml += '<li>' + diagnosis.medications[i] + '</li>';
+            }
+            medicationsHtml += '</ul>';
+        } else {
+            medicationsHtml = '<p>No specific medications recommended.</p>';
+        }
+        
+        let dietHtml = '';
+        if (diagnosis.diet && diagnosis.diet.length > 0) {
+            dietHtml = '<ul class="list-items">';
+            for (let i = 0; i < diagnosis.diet.length; i++) {
+                dietHtml += '<li>' + diagnosis.diet[i] + '</li>';
+            }
+            dietHtml += '</ul>';
+        } else {
+            dietHtml = '<p>No specific diet recommendations.</p>';
+        }
+        
+        let workoutsHtml = '';
+        if (diagnosis.workouts && diagnosis.workouts.length > 0) {
+            workoutsHtml = '<ul class="list-items">';
+            for (let i = 0; i < diagnosis.workouts.length; i++) {
+                workoutsHtml += '<li>' + diagnosis.workouts[i] + '</li>';
+            }
+            workoutsHtml += '</ul>';
+        } else {
+            workoutsHtml = '<p>No specific workout recommendations.</p>';
+        }
+        
+        diagnosisCard.innerHTML = 
+            '<div class="diagnosis-card">' +
+                '<div class="diagnosis-header">' +
+                    '<h5 class="mb-1">Diagnosis: ' + diagnosis.disease + '</h5>' +
+                    '<p class="mb-0 text-white-50">Based on your reported symptoms</p>' +
+                '</div>' +
+                '<div class="diagnosis-body">' +
+                    '<div class="diagnosis-item">' +
+                        '<h6>CAUSES</h6>' +
+                        '<p>' + diagnosis.causes + '</p>' +
+                    '</div>' +
+                    
+                    '<div class="diagnosis-item">' +
+                        '<h6>PRECAUTIONS</h6>' +
+                        precautionsHtml +
+                    '</div>' +
+                    
+                    '<div class="row">' +
+                        '<div class="col-md-6">' +
+                            '<div class="diagnosis-item">' +
+                                '<h6>RECOMMENDED MEDICATIONS</h6>' +
+                                medicationsHtml +
+                            '</div>' +
+                        '</div>' +
+                        
+                        '<div class="col-md-6">' +
+                            '<div class="diagnosis-item">' +
+                                '<h6>RECOMMENDED DIET</h6>' +
+                                dietHtml +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    
+                    '<div class="diagnosis-item mb-0">' +
+                        '<h6>RECOMMENDED ACTIVITIES</h6>' +
+                        workoutsHtml +
+                    '</div>' +
+                '</div>' +
+                '<div class="diagnosis-footer">' +
+                    '<div class="d-flex justify-content-between w-100">' +
+                        '<button onclick="document.getElementById(\'diagnosisCard\').style.display = \'none\'" class="btn btn-sm btn-outline-light">' +
+                            '<i class="fas fa-times"></i> Close' +
+                        '</button>' +
+                        '<a href="{{ url_for("history") }}" class="btn btn-sm btn-outline-success">' +
+                            '<i class="fas fa-history"></i> View History' +
+                        '</a>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        
+        diagnosisCard.style.display = 'block';
+        scrollToBottom();
+    }
+    
+    // Function to process AI response and format it for display
+    function processAIResponse(content, timestamp) {
+        // Add to chat interface
+        addMessage(content, 'ai', timestamp);
+        
+        // Add diagnoses to history if needed
+        if (content.includes("Based on your symptoms, I believe you may have")) {
+            // Already handled in the addMessage function
+            console.log("Diagnosis message processed with formatting");
+        }
+    }
+    
+    // Form submission handler
+    document.getElementById('messageForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const input = document.getElementById('messageInput');
+        const message = input.value.trim();
+        
+        if (!message) return;
+        
+        // Add user message to chat
+        addMessage(message, 'user');
+        
+        // Clear input
+        input.value = '';
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Send message to server
+        fetch('/api/messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content: message })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Hide typing indicator
+            hideTypingIndicator();
+            
+            // Add AI responses to chat (handle both single and multiple messages)
+            if (data.ai_messages && data.ai_messages.length > 0) {
+                // If we have the new ai_messages array, use it
+                data.ai_messages.forEach(message => {
+                    processAIResponse(message.content, message.timestamp);
+                });
+            } else if (data.ai_message) {
+                // Fallback for old response format
+                processAIResponse(data.ai_message.content, data.ai_message.timestamp);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            hideTypingIndicator();
+            addMessage('Sorry, something went wrong. Please try again.', 'ai');
+        });
+    });
+    
+    // Scroll to bottom on page load
+    window.addEventListener('load', scrollToBottom);
+</script>
+{% endblock %}

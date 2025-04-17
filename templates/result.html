@@ -1,0 +1,187 @@
+{% extends "layout.html" %}
+
+{% block title %}Mental Health Screening | Assessment Results{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card mb-4">
+                <div class="card-header bg-{{ 'success' if assessment.risk_level == 'Low' else 'warning' if assessment.risk_level == 'Moderate' else 'danger' }} text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1 class="h3 mb-0">{{ assessment.assessment_type|capitalize }} Assessment Results</h1>
+                        <span class="badge bg-light text-dark">{{ assessment.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4 mb-md-0">
+                            <h3>Risk Level</h3>
+                            <div class="risk-level-chart-container" style="height: 150px;">
+                                <canvas id="riskLevelChart"></canvas>
+                            </div>
+                            <h4 class="mt-3 text-{{ 'success' if assessment.risk_level == 'Low' else 'warning' if assessment.risk_level == 'Moderate' else 'danger' }}">
+                                {{ assessment.risk_level }}
+                            </h4>
+                        </div>
+                        <div class="col-md-8">
+                            <h3>Assessment Summary</h3>
+                            <div class="result-header result-{{ assessment.risk_level.lower() }}">
+                                <div class="mb-3">
+                                    <h4>Identified Symptoms</h4>
+                                    <p>{{ assessment.symptoms }}</p>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <h4>Score Information</h4>
+                                    <canvas id="scoreChart" height="50"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h3>Recommendations</h3>
+                                    <p>{{ assessment.recommendations }}</p>
+                                    
+                                    {% if assessment.risk_level == 'High' %}
+                                    <div class="alert alert-danger mt-3">
+                                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                        <strong>Important:</strong> Your responses indicate a high risk level. It is strongly recommended that you consult with a mental health professional as soon as possible.
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="h5 mb-0">Follow-Up Plan</h3>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        {% if assessment.risk_level == 'Low' %}
+                                        <li class="list-group-item bg-transparent">Continue to monitor your symptoms</li>
+                                        <li class="list-group-item bg-transparent">Practice self-care regularly</li>
+                                        <li class="list-group-item bg-transparent">Repeat the assessment in 3 months</li>
+                                        {% elif assessment.risk_level == 'Moderate' %}
+                                        <li class="list-group-item bg-transparent">Consider scheduling a consultation with a healthcare provider</li>
+                                        <li class="list-group-item bg-transparent">Implement the recommended coping strategies</li>
+                                        <li class="list-group-item bg-transparent">Repeat the assessment in 1 month</li>
+                                        {% else %}
+                                        <li class="list-group-item bg-transparent">Schedule an appointment with a mental health professional</li>
+                                        <li class="list-group-item bg-transparent">Consider reaching out to a crisis helpline if needed</li>
+                                        <li class="list-group-item bg-transparent">Share these results with your healthcare provider</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="h5 mb-0">Next Steps</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p>Your assessment results can be shared with healthcare providers or saved for future reference.</p>
+                                    
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-primary export-report" data-report-type="print">
+                                            <i class="bi bi-printer me-1"></i> Print Report
+                                        </button>
+                                        <button class="btn btn-primary export-report" data-report-type="email" data-assessment-id="{{ assessment.id }}">
+                                            <i class="bi bi-envelope me-1"></i> Email Report
+                                        </button>
+                                        <button class="btn btn-primary export-report" data-report-type="whatsapp">
+                                            <i class="bi bi-whatsapp me-1"></i> Share via WhatsApp
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="mt-3 small">
+                                        <i class="bi bi-shield-lock me-1"></i> Confidentiality Note: This report contains sensitive health information. Please share responsibly.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional Resources Section -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card bg-dark text-white">
+                                <div class="card-body">
+                                    <h3>Additional Resources</h3>
+                                    <p>Visit our resources page for helpful information, coping strategies, and support options.</p>
+                                    <a href="{{ url_for('resources') }}" class="btn btn-light">Access Resources</a>
+                                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light ms-2">Return to Dashboard</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hidden content for report export -->
+            <div class="report-content d-none">
+                Assessment Type: {{ assessment.assessment_type|capitalize }}
+                Date: {{ assessment.created_at.strftime('%Y-%m-%d %H:%M') }}
+                Risk Level: {{ assessment.risk_level }}
+                
+                Symptoms:
+                {{ assessment.symptoms }}
+                
+                Recommendations:
+                {{ assessment.recommendations }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Email Report Modal -->
+<div class="modal fade" id="emailReportModal" tabindex="-1" aria-labelledby="emailReportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailReportModalLabel">Email Assessment Report</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="post">
+                    <input type="hidden" id="assessment-id-input" name="assessment_id">
+                    <div class="mb-3">
+                        <label for="recipient-email" class="form-label">Recipient Email</label>
+                        <input type="email" class="form-control" id="recipient-email" name="recipient_email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email-message" class="form-label">Additional Message (Optional)</label>
+                        <textarea class="form-control" id="email-message" name="message" rows="3"></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Send Report</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Create risk level chart
+        createRiskLevelChart('riskLevelChart', '{{ assessment.risk_level }}');
+        
+        // Create score chart - assuming max score is 80 for all assessments (20 questions, max 4 points each)
+        createScoreComparisonChart('scoreChart', {{ assessment.score }}, 80);
+    });
+</script>
+{% endblock %}

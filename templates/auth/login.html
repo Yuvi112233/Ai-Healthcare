@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Log In - HealthBox{% endblock %}
+
+{% block head %}
+<style>
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+    
+    .auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .auth-card {
+        background-color: var(--bs-dark);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 900px;
+    }
+    
+    .auth-image {
+        height: 100%;
+        background-image: url('https://img.freepik.com/free-vector/online-doctor-concept_23-2148521125.jpg?size=626&ext=jpg');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    
+    .auth-image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(26, 115, 232, 0.8) 0%, rgba(108, 92, 231, 0.8) 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        color: #fff;
+        text-align: center;
+    }
+    
+    .auth-form {
+        padding: 2.5rem;
+    }
+    
+    .form-control {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        padding: 12px 15px;
+    }
+    
+    .form-control:focus {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: var(--bs-primary);
+        box-shadow: 0 0 0 0.25rem rgba(26, 115, 232, 0.25);
+    }
+    
+    .logo-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .logo-container img {
+        height: 35px;
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="row g-0">
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="auth-image">
+                    <div class="auth-image-overlay">
+                        <h2 class="mb-4">Welcome Back to HealthBox</h2>
+                        <p>Your personal AI medical assistant for accurate diagnoses and health recommendations.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="auth-form">
+                    <div class="logo-container">
+                        <img src="{{ url_for('static', filename='img/healthbox-logo.svg') }}" alt="HealthBox Logo">
+                        <h4 class="mb-0">HealthBox</h4>
+                    </div>
+                    
+                    <h3 class="mb-4">Log In</h3>
+                    
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <form method="post" action="{{ url_for('login') }}">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                            <label class="form-check-label" for="remember">Remember me</label>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary py-2">Log In</button>
+                            <a href="{{ url_for('index') }}" class="btn btn-outline-light py-2">Back to Home</a>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <p>Don't have an account? <a href="{{ url_for('register') }}" class="text-primary">Register</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

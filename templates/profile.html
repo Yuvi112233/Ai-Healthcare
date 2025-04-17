@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - HealthBox{% endblock %}
+
+{% block head %}
+<style>
+    .sidebar {
+        background-color: var(--bs-dark);
+        min-height: 100vh;
+        padding: 20px 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar-brand {
+        padding: 0 20px 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+    }
+    
+    .sidebar-brand img {
+        max-height: 35px;
+        margin-right: 10px;
+    }
+    
+    .sidebar-brand h5 {
+        margin: 0;
+        font-weight: 600;
+    }
+    
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .sidebar-menu li {
+        margin-bottom: 5px;
+    }
+    
+    .sidebar-menu a {
+        display: block;
+        padding: 10px 20px;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+    
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+    }
+    
+    .sidebar-menu a i {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+    }
+    
+    .user-profile {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 20px;
+    }
+    
+    .user-profile .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--bs-primary);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        font-weight: 600;
+    }
+    
+    .user-info {
+        flex: 1;
+    }
+    
+    .user-info h6 {
+        margin: 0;
+        font-weight: 600;
+    }
+    
+    .user-info p {
+        margin: 0;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    /* Profile content */
+    .profile-header {
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 30px;
+    }
+    
+    .profile-section {
+        background-color: var(--bs-dark);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: var(--bs-primary);
+        color: #fff;
+        font-size: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-weight: 600;
+    }
+    
+    .profile-info-item {
+        margin-bottom: 15px;
+    }
+    
+    .profile-info-label {
+        font-size: 0.875rem;
+        margin-bottom: 5px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .profile-info-value {
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        font-weight: 500;
+    }
+    
+    .medical-history {
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        border-radius: 5px;
+        white-space: pre-line;
+    }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+<div class="col-auto px-0">
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            
+            <h3>HealthBox</h3>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{{ url_for('dashboard') }}">
+                    <i class="fas fa-comment-dots"></i> Chat Diagnosis
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('history') }}">
+                    <i class="fas fa-history"></i> Diagnosis History
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('profile') }}" class="active">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('logout') }}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </li>
+        </ul>
+        
+        <div class="user-profile mt-auto">
+            <div class="avatar">
+                {{ current_user.name[:1] }}
+            </div>
+            <div class="user-info">
+                <h6>{{ current_user.name }}</h6>
+                <p>{{ current_user.email }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="profile-header">
+        <h3>My Profile</h3>
+        <p class="text-muted">Manage your personal information</p>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="profile-section text-center">
+                <div class="profile-avatar">
+                    {{ current_user.name[:1] }}
+                </div>
+                <h4 class="mb-1">{{ current_user.name }}</h4>
+                <p class="text-muted mb-3">{{ current_user.email }}</p>
+                <p>
+                    <span class="badge bg-info">{{ current_user.gender|title }}</span>
+                    <span class="badge bg-secondary">{{ current_user.age }} years old</span>
+                </p>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="profile-section">
+                <h5 class="mb-4">Personal Information</h5>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="profile-info-item">
+                            <div class="profile-info-label">Name</div>
+                            <div class="profile-info-value">{{ current_user.name }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="profile-info-item">
+                            <div class="profile-info-label">Email</div>
+                            <div class="profile-info-value">{{ current_user.email }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="profile-info-item">
+                            <div class="profile-info-label">Age</div>
+                            <div class="profile-info-value">{{ current_user.age }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="profile-info-item">
+                            <div class="profile-info-label">Gender</div>
+                            <div class="profile-info-value">{{ current_user.gender|title }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="profile-info-item">
+                            <div class="profile-info-label">Occupation</div>
+                            <div class="profile-info-value">{{ current_user.occupation }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="profile-info-item">
+                            <div class="profile-info-label">Member Since</div>
+                            <div class="profile-info-value">{{ current_user.created_at.strftime('%B %d, %Y') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <h5 class="mb-3">Medical History</h5>
+                <div class="medical-history">
+                    {{ current_user.medical_history }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

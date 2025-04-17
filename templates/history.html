@@ -1,0 +1,413 @@
+{% extends 'base.html' %}
+
+{% block title %}Diagnosis History - HealthBox{% endblock %}
+
+{% block head %}
+<style>
+    .sidebar {
+        background-color: var(--bs-dark);
+        min-height: 100vh;
+        padding: 20px 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar-brand {
+        padding: 0 20px 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+    }
+    
+    .sidebar-brand img {
+        max-height: 35px;
+        margin-right: 10px;
+    }
+    
+    .sidebar-brand h5 {
+        margin: 0;
+        font-weight: 600;
+    }
+    
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .sidebar-menu li {
+        margin-bottom: 5px;
+    }
+    
+    .sidebar-menu a {
+        display: block;
+        padding: 10px 20px;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+    
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+    }
+    
+    .sidebar-menu a i {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+    }
+    
+    .user-profile {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 20px;
+    }
+    
+    .user-profile .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--bs-primary);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        font-weight: 600;
+    }
+    
+    .user-info {
+        flex: 1;
+    }
+    
+    .user-info h6 {
+        margin: 0;
+        font-weight: 600;
+    }
+    
+    .user-info p {
+        margin: 0;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    /* History content */
+    .history-header {
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 30px;
+    }
+    
+    .diagnosis-card {
+        background-color: var(--bs-dark);
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .diagnosis-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        border-color: rgba(26, 115, 232, 0.3);
+    }
+    
+    .diagnosis-header {
+        padding: 20px;
+        background: var(--secondary-gradient);
+        color: #fff;
+    }
+    
+    .diagnosis-body {
+        padding: 20px;
+    }
+    
+    .diagnosis-section {
+        margin-bottom: 20px;
+    }
+    
+    .diagnosis-section h6 {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 8px;
+    }
+    
+    .diagnosis-footer {
+        padding: 15px 20px;
+        background-color: rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .diagnosis-time {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .badge-disease {
+        background: var(--primary-gradient);
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    
+    .list-items {
+        padding-left: 20px;
+        margin-bottom: 0;
+    }
+    
+    .list-items li {
+        margin-bottom: 5px;
+    }
+    
+    .diagnosis-tag {
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        font-size: 12px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+    
+    .collapse-btn {
+        background: transparent;
+        border: none;
+        color: var(--bs-primary);
+        font-size: 14px;
+        cursor: pointer;
+        padding: 0;
+    }
+    
+    .collapse-btn:focus {
+        outline: none;
+    }
+    
+    .timeline-date {
+        position: relative;
+        padding-left: 20px;
+        margin-bottom: 30px;
+        font-weight: 500;
+    }
+    
+    .timeline-date::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 5px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: var(--bs-primary);
+    }
+    
+    .timeline-date::after {
+        content: "";
+        position: absolute;
+        left: 5px;
+        top: 15px;
+        width: 1px;
+        height: calc(100% + 30px);
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .timeline-date:last-child::after {
+        display: none;
+    }
+    
+    /* Empty state */
+    .empty-state {
+        text-align: center;
+        padding: 50px 0;
+    }
+    
+    .empty-icon {
+        width: 100px;
+        height: 100px;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 40px;
+        color: rgba(255, 255, 255, 0.3);
+    }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+<div class="col-auto px-0">
+    <div class="sidebar">
+        <div class="sidebar-brand">
+           
+            <h3>HealthBox</h3>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{{ url_for('dashboard') }}">
+                    <i class="fas fa-comment-dots"></i> Chat Diagnosis
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('history') }}" class="active">
+                    <i class="fas fa-history"></i> Diagnosis History
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('profile') }}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('logout') }}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </li>
+        </ul>
+        
+        <div class="user-profile mt-auto">
+            <div class="avatar">
+                {{ current_user.name[:1] }}
+            </div>
+            <div class="user-info">
+                <h6>{{ current_user.name }}</h6>
+                <p>{{ current_user.email }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="history-header">
+        <h3>Your Diagnosis History</h3>
+        <p class="text-muted">Track your health over time with your previous diagnoses</p>
+    </div>
+    
+    {% if diagnoses %}
+        {% set current_date = None %}
+        
+        {% for diagnosis in diagnoses %}
+            {% set diagnosis_date = diagnosis.timestamp.strftime('%B %d, %Y') %}
+            
+            {% if diagnosis_date != current_date %}
+                {% set current_date = diagnosis_date %}
+                <div class="timeline-date">{{ current_date }}</div>
+            {% endif %}
+            
+            <div class="diagnosis-card">
+                <div class="diagnosis-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-1">{{ diagnosis.disease }}</h5>
+                        <span class="badge-disease">{{ diagnosis.disease }}</span>
+                    </div>
+                    <p class="mb-0 text-white-50">Diagnosed on {{ diagnosis.timestamp.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                </div>
+                
+                <div class="diagnosis-body">
+                    <div class="diagnosis-section">
+                        <h6>CAUSES</h6>
+                        <p>{{ diagnosis.causes }}</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="diagnosis-section">
+                                <h6>PRECAUTIONS</h6>
+                                <ul class="list-items">
+                                    {% for item in diagnosis.precautions %}
+                                        <li>{{ item }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="diagnosis-section">
+                                <h6>RECOMMENDED MEDICATIONS</h6>
+                                <ul class="list-items">
+                                    {% for item in diagnosis.medications %}
+                                        <li>{{ item }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="collapse" id="collapseDetails{{ loop.index }}">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="diagnosis-section">
+                                    <h6>RECOMMENDED DIET</h6>
+                                    <ul class="list-items">
+                                        {% for item in diagnosis.diet %}
+                                            <li>{{ item }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="diagnosis-section mb-0">
+                                    <h6>RECOMMENDED ACTIVITIES</h6>
+                                    <ul class="list-items">
+                                        {% for item in diagnosis.workouts %}
+                                            <li>{{ item }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="diagnosis-footer">
+                    <button class="collapse-btn" data-bs-toggle="collapse" data-bs-target="#collapseDetails{{ loop.index }}">
+                        <i class="fas fa-chevron-down"></i> 
+                        <span class="show-details">Show more details</span>
+                        <span class="hide-details d-none">Hide details</span>
+                    </button>
+                    <div class="diagnosis-time">
+                        {{ diagnosis.timestamp.strftime('%I:%M %p') }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-file-medical"></i>
+            </div>
+            <h5>No Diagnosis History</h5>
+            <p class="text-muted">You haven't received any diagnoses yet. Start a conversation with our AI assistant to get your first diagnosis.</p>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary mt-3">
+                <i class="fas fa-comment-dots me-2"></i> Start a Diagnosis
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Toggle show/hide text for collapsible sections
+    document.querySelectorAll('.collapse-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const showText = this.querySelector('.show-details');
+            const hideText = this.querySelector('.hide-details');
+            
+            showText.classList.toggle('d-none');
+            hideText.classList.toggle('d-none');
+        });
+    });
+</script>
+{% endblock %}

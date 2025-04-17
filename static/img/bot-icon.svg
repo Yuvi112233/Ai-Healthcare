@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="botGradient">
+            <stop stop-color="#20bf6b" offset="0%"></stop>
+            <stop stop-color="#0bb197" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Bot Head -->
+        <rect x="5" y="5" width="30" height="25" rx="10" fill="url(#botGradient)"/>
+        
+        <!-- Bot Eyes -->
+        <circle cx="15" cy="15" r="3" fill="white"/>
+        <circle cx="25" cy="15" r="3" fill="white"/>
+        <circle cx="15" cy="15" r="1.5" fill="#222"/>
+        <circle cx="25" cy="15" r="1.5" fill="#222"/>
+        
+        <!-- Bot Mouth -->
+        <path d="M13,23 C13,25.5 17,27 20,27 C23,27 27,25.5 27,23" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        
+        <!-- Bot Antennas -->
+        <line x1="20" y1="5" x2="20" y2="2" stroke="url(#botGradient)" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="20" cy="1" r="1" fill="url(#botGradient)"/>
+        
+        <!-- Bot Base -->
+        <path d="M15,30 L15,35 L25,35 L25,30" stroke="url(#botGradient)" stroke-width="2" fill="transparent"/>
+        <rect x="10" y="30" width="20" height="3" rx="1.5" fill="url(#botGradient)"/>
+    </g>
+</svg>

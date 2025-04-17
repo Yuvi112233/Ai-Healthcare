@@ -1,0 +1,452 @@
+{% extends "layout.html" %}
+
+{% block title %}Mental Health Screening | Resources{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="mb-4">Mental Health Resources</h1>
+            <p class="lead">
+                Access helpful resources, coping strategies, and support options to help manage your mental health.
+            </p>
+        </div>
+    </div>
+
+    <!-- Emergency Resources Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Emergency Resources</h2>
+                    <p class="card-text">If you or someone you know is in immediate danger or having thoughts of suicide, please reach out for help immediately.</p>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="card bg-dark">
+                                <div class="card-body">
+                                    <h5 class="card-title">National Suicide Prevention Lifeline</h5>
+                                    <p class="card-text">24/7, free and confidential support</p>
+                                    <p class="card-text"><strong>Call:</strong> 988 or 1-800-273-8255</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="card bg-dark">
+                                <div class="card-body">
+                                    <h5 class="card-title">Crisis Text Line</h5>
+                                    <p class="card-text">24/7 text support with a crisis counselor</p>
+                                    <p class="card-text"><strong>Text HOME to:</strong> 741741</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-dark">
+                                <div class="card-body">
+                                    <h5 class="card-title">Emergency Services</h5>
+                                    <p class="card-text">For immediate emergency assistance</p>
+                                    <p class="card-text"><strong>Call:</strong> 112 or 102</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stress Relief Videos Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <h2 class="mb-4">Stress Relief Videos</h2>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card resource-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Guided Meditation for Anxiety</h5>
+                    <p class="card-text">A 10-minute guided meditation practice to help reduce anxiety and stress.</p>
+                    <div class="ratio ratio-16x9 mb-3">
+                        <iframe src="https://www.youtube.com/embed/O-6f5wQXSu8" title="Guided Meditation for Anxiety" allowfullscreen></iframe>
+                    </div>
+                    <a href="https://www.youtube.com/watch?v=O-6f5wQXSu8" class="btn btn-primary" target="_blank">Watch on YouTube</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card resource-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Progressive Muscle Relaxation</h5>
+                    <p class="card-text">Learn how to release tension through progressive muscle relaxation techniques.</p>
+                    <div class="ratio ratio-16x9 mb-3">
+                        <iframe src="https://www.youtube.com/embed/1nZEdqcGVzo" title="Progressive Muscle Relaxation" allowfullscreen></iframe>
+                    </div>
+                    <a href="https://www.youtube.com/watch?v=1nZEdqcGVzo" class="btn btn-primary" target="_blank">Watch on YouTube</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card resource-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Deep Breathing Exercises</h5>
+                    <p class="card-text">Simple breathing techniques that help reduce stress and promote relaxation.</p>
+                    <div class="ratio ratio-16x9 mb-3">
+                        <iframe src="https://www.youtube.com/embed/acUZdGd_3Gk" title="Deep Breathing Exercises" allowfullscreen></iframe>
+                    </div>
+                    <a href="https://www.youtube.com/watch?v=acUZdGd_3Gk" class="btn btn-primary" target="_blank">Watch on YouTube</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guided Breathing Exercises Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="mb-4">Guided Breathing Exercise</h2>
+            <div class="card">
+                <div class="card-body text-center">
+                    <h3>4-7-8 Breathing Technique</h3>
+                    <p class="lead">Follow the animation below to practice this calming breathing pattern</p>
+                    
+                    <div class="breathing-animation my-5">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="circle" id="breathingCircle" style="width: 200px; height: 200px; border-radius: 50%; background-color: rgba(var(--bs-primary-rgb), 0.3); display: flex; justify-content: center; align-items: center; position: relative;">
+                                <div class="circle-text" id="breathingText">Inhale</div>
+                                <div class="circle-timer" id="breathingTimer" style="position: absolute; bottom: -30px; font-size: 1.5rem;">4</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <button id="startBreathingBtn" class="btn btn-primary">Start Breathing Exercise</button>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card bg-primary bg-opacity-10">
+                                <div class="card-body text-center">
+                                    <h5>Step 1: Inhale</h5>
+                                    <p>Breathe in quietly through your nose for a count of 4</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-primary bg-opacity-10">
+                                <div class="card-body text-center">
+                                    <h5>Step 2: Hold</h5>
+                                    <p>Hold your breath for a count of 7</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-primary bg-opacity-10">
+                                <div class="card-body text-center">
+                                    <h5>Step 3: Exhale</h5>
+                                    <p>Exhale completely through your mouth for a count of 8</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Helpline Numbers Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="mb-4">Helpline Numbers</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Organization</th>
+                            <th>Services</th>
+                            <th>Contact</th>
+                            <th>Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>NIMHANS Toll-Free Mental Health Helpline</td>
+                            <td>General mental health support and guidance</td>
+                            <td><strong>080-46110007</strong></td>
+                            <td>24/7</td>
+                        </tr>
+                        <tr>
+                            <td>iCall Helpline (Tata Institute of Social Sciences)</td>
+                            <td>Psychosocial counseling</td>
+                            <td><strong>022-25521111</strong></td>
+                            <td>Mon-Sat, 8am-10pm</td>
+                        </tr>
+                        <tr>
+                            <td>Vandrevala Foundation</td>
+                            <td>Mental health counseling and crisis intervention</td>
+                            <td><strong>+91 9999666555</strong></td>
+                            <td>24/7</td>
+                        </tr>
+                        <tr>
+                            <td>AASRA</td>
+                            <td>Crisis intervention and suicide prevention</td>
+                            <td><strong>+91 9820466726</strong></td>
+                            <td>24/7</td>
+                        </tr>
+                        <tr>
+                            <td>Arpita Suicide Prevention Helpline</td>
+                            <td>Suicide prevention and emotional support</td>
+                            <td><strong>080-23655557</strong></td>
+                            <td>10am-1pm, 2pm-5pm</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mental Health FAQs Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="mb-4">Mental Health FAQs</h2>
+            <div class="accordion" id="mentalHealthFAQ">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            What's the difference between sadness and depression?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#mentalHealthFAQ">
+                        <div class="accordion-body">
+                            <p>Sadness is a normal human emotion that everyone experiences in response to difficult situations. It's usually temporary and tied to a specific event or circumstance.</p>
+                            <p>Depression is a mental health condition characterized by persistent feelings of sadness, hopelessness, and loss of interest in activities once enjoyed. Depression affects how you feel, think, and handle daily activities, and can interfere with your ability to work, study, eat, sleep, and enjoy life. To be diagnosed with depression, symptoms must be present for at least two weeks.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            How do I know if I should seek professional help?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#mentalHealthFAQ">
+                        <div class="accordion-body">
+                            <p>Consider seeking professional help if you experience:</p>
+                            <ul>
+                                <li>Persistent feelings of sadness, anxiety, or emptiness that don't go away</li>
+                                <li>Significant changes in appetite or sleep patterns</li>
+                                <li>Loss of interest in activities you previously enjoyed</li>
+                                <li>Difficulty concentrating or making decisions</li>
+                                <li>Thoughts of death or suicide</li>
+                                <li>Mental health symptoms that interfere with daily functioning</li>
+                                <li>Substance use to cope with emotional problems</li>
+                            </ul>
+                            <p>Remember, seeking help is a sign of strength, not weakness. Mental health conditions are medical conditions that require proper treatment.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            What types of mental health professionals are there?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#mentalHealthFAQ">
+                        <div class="accordion-body">
+                            <ul>
+                                <li><strong>Psychiatrists:</strong> Medical doctors who can diagnose mental health conditions and prescribe medication</li>
+                                <li><strong>Psychologists:</strong> Professionals with advanced degrees in psychology who provide therapy and psychological testing</li>
+                                <li><strong>Clinical Social Workers:</strong> Professionals trained to evaluate mental health and use therapeutic techniques</li>
+                                <li><strong>Counselors:</strong> Mental health professionals who provide guidance and support for various issues</li>
+                                <li><strong>Psychiatric Nurses:</strong> Registered nurses with specialized training in mental health</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            What are some self-care strategies for mental health?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#mentalHealthFAQ">
+                        <div class="accordion-body">
+                            <p>Self-care strategies that can help maintain good mental health include:</p>
+                            <ul>
+                                <li>Regular physical activity</li>
+                                <li>Adequate sleep</li>
+                                <li>Healthy eating habits</li>
+                                <li>Mindfulness and meditation practice</li>
+                                <li>Maintaining social connections</li>
+                                <li>Setting boundaries and saying no when necessary</li>
+                                <li>Engaging in activities you enjoy</li>
+                                <li>Limiting alcohol and avoiding drugs</li>
+                                <li>Spending time in nature</li>
+                                <li>Seeking help when needed</li>
+                            </ul>
+                            <p>Remember that self-care isn't selfish—it's necessary for maintaining good mental health.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            How can I help someone with a mental health condition?
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#mentalHealthFAQ">
+                        <div class="accordion-body">
+                            <p>Here are ways to support someone with a mental health condition:</p>
+                            <ul>
+                                <li>Listen without judgment</li>
+                                <li>Express your concern and support</li>
+                                <li>Encourage them to seek professional help</li>
+                                <li>Learn about their condition</li>
+                                <li>Be patient and understanding</li>
+                                <li>Offer to help with everyday tasks if needed</li>
+                                <li>Include them in activities, but respect their boundaries</li>
+                                <li>Take care of your own mental health</li>
+                            </ul>
+                            <p>Remember that you can't force someone to get help, but you can offer support and resources.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recommended Apps Section -->
+    <div class="row mt-5 mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Recommended Mental Health Apps</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Headspace</h5>
+                            <p class="card-text">Guided meditation and mindfulness practices for stress reduction and better sleep.</p>
+                            <a href="https://www.headspace.com/" class="btn btn-primary" target="_blank">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Calm</h5>
+                            <p class="card-text">Sleep stories, meditation, and relaxation exercises to help reduce anxiety and improve sleep.</p>
+                            <a href="https://www.calm.com/" class="btn btn-primary" target="_blank">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Wysa</h5>
+                            <p class="card-text">AI chatbot offering evidence-based coaching and self-help tools for mental wellness.</p>
+                            <a href="https://www.wysa.io/" class="btn btn-primary" target="_blank">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Breathing exercise animation
+        const breathingCircle = document.getElementById('breathingCircle');
+        const breathingText = document.getElementById('breathingText');
+        const breathingTimer = document.getElementById('breathingTimer');
+        const startBreathingBtn = document.getElementById('startBreathingBtn');
+        
+        let isBreathingActive = false;
+        let breathingInterval;
+        let currentPhase = 'inhale';
+        let currentCount = 4;
+        
+        function updateBreathingAnimation() {
+            if (currentPhase === 'inhale') {
+                breathingCircle.style.transform = 'scale(1.5)';
+                breathingCircle.style.backgroundColor = 'rgba(var(--bs-primary-rgb), 0.3)';
+                breathingText.textContent = 'Inhale';
+                currentCount = 4;
+            } else if (currentPhase === 'hold') {
+                breathingCircle.style.transform = 'scale(1.5)';
+                breathingCircle.style.backgroundColor = 'rgba(var(--bs-warning-rgb), 0.3)';
+                breathingText.textContent = 'Hold';
+                currentCount = 7;
+            } else if (currentPhase === 'exhale') {
+                breathingCircle.style.transform = 'scale(1)';
+                breathingCircle.style.backgroundColor = 'rgba(var(--bs-success-rgb), 0.3)';
+                breathingText.textContent = 'Exhale';
+                currentCount = 8;
+            }
+            
+            breathingTimer.textContent = currentCount;
+        }
+        
+        function startBreathingExercise() {
+            if (isBreathingActive) return;
+            
+            isBreathingActive = true;
+            startBreathingBtn.textContent = 'Stop Exercise';
+            
+            // Set transition for smooth animation
+            breathingCircle.style.transition = 'transform 4s ease, background-color 1s ease';
+            
+            // Initialize with inhale phase
+            currentPhase = 'inhale';
+            currentCount = 4;
+            updateBreathingAnimation();
+            
+            // Start the countdown
+            breathingInterval = setInterval(() => {
+                currentCount--;
+                breathingTimer.textContent = currentCount;
+                
+                if (currentCount <= 0) {
+                    // Move to next phase
+                    if (currentPhase === 'inhale') {
+                        currentPhase = 'hold';
+                    } else if (currentPhase === 'hold') {
+                        currentPhase = 'exhale';
+                    } else {
+                        currentPhase = 'inhale';
+                    }
+                    
+                    updateBreathingAnimation();
+                }
+            }, 1000);
+        }
+        
+        function stopBreathingExercise() {
+            if (!isBreathingActive) return;
+            
+            isBreathingActive = false;
+            clearInterval(breathingInterval);
+            
+            // Reset
+            breathingCircle.style.transform = 'scale(1)';
+            breathingCircle.style.backgroundColor = 'rgba(var(--bs-primary-rgb), 0.3)';
+            breathingText.textContent = 'Inhale';
+            breathingTimer.textContent = '4';
+            startBreathingBtn.textContent = 'Start Breathing Exercise';
+        }
+        
+        startBreathingBtn.addEventListener('click', function() {
+            if (isBreathingActive) {
+                stopBreathingExercise();
+            } else {
+                startBreathingExercise();
+            }
+        });
+    });
+</script>
+{% endblock %}

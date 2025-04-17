@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - HealthBox{% endblock %}
+
+{% block head %}
+<style>
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+    
+    .auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+    
+    .auth-card {
+        background-color: var(--bs-dark);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 900px;
+    }
+    
+    .auth-image {
+        height: 100%;
+        background-image: url('https://img.freepik.com/free-vector/doctors-concept-illustration_114360-1515.jpg?size=626&ext=jpg');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    
+    .auth-image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(26, 115, 232, 0.8) 0%, rgba(108, 92, 231, 0.8) 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        color: #fff;
+        text-align: center;
+    }
+    
+    .auth-form {
+        padding: 2rem;
+    }
+    
+    .form-control {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        padding: 12px 15px;
+    }
+    
+    .form-control:focus {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: var(--bs-primary);
+        box-shadow: 0 0 0 0.25rem rgba(26, 115, 232, 0.25);
+    }
+    
+    .logo-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .logo-container img {
+        height: 35px;
+        margin-right: 10px;
+    }
+    
+    /* Custom radio buttons for gender */
+    .gender-options {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .gender-option {
+        flex: 1;
+        position: relative;
+    }
+    
+    .gender-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .gender-option label {
+        display: block;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 12px;
+        border-radius: 6px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .gender-option input[type="radio"]:checked + label {
+        background-color: rgba(26, 115, 232, 0.2);
+        border-color: var(--bs-primary);
+    }
+    
+    .gender-option label:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="row g-0">
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="auth-image">
+                    <div class="auth-image-overlay">
+                        <h2 class="mb-4">Join HealthBox Today</h2>
+                        <p>Create your account to access personalized health diagnostics and recommendations powered by AI.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-7">
+                <div class="auth-form">
+                    <div class="logo-container">
+                        <img src="{{ url_for('static', filename='img/healthbox-logo.svg') }}" alt="HealthBox Logo">
+                        <h4 class="mb-0">HealthBox</h4>
+                    </div>
+                    
+                    <h3 class="mb-4">Create Account</h3>
+                    
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <form method="post" action="{{ url_for('register') }}">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" name="age" min="1" max="120" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label d-block">Gender</label>
+                            <div class="gender-options">
+                                <div class="gender-option">
+                                    <input type="radio" id="male" name="gender" value="male" required>
+                                    <label for="male">Male</label>
+                                </div>
+                                
+                                <div class="gender-option">
+                                    <input type="radio" id="female" name="gender" value="female">
+                                    <label for="female">Female</label>
+                                </div>
+                                
+                                <div class="gender-option">
+                                    <input type="radio" id="other" name="gender" value="other">
+                                    <label for="other">Other</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="occupation" class="form-label">Occupation</label>
+                            <input type="text" class="form-control" id="occupation" name="occupation" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="medical_history" class="form-label">Medical History <small class="text-muted">(Any pre-existing conditions, allergies, etc.)</small></label>
+                            <textarea class="form-control" id="medical_history" name="medical_history" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                            <label class="form-check-label" for="terms">I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a></label>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary py-2">Create Account</button>
+                            <a href="{{ url_for('index') }}" class="btn btn-outline-light py-2">Back to Home</a>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <p>Already have an account? <a href="{{ url_for('login') }}" class="text-primary">Log In</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Immediate Help - HealthBox{% endblock %}
+
+{% block head %}
+<style>
+    .emergency-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        padding: 20px;
+    }
+    .emergency-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        max-width: 600px;
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .emergency-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+    .emergency-title {
+        color: #ff4444;
+        font-weight: 700;
+        margin-bottom: 20px;
+        background: linear-gradient(90deg, #ff4444, #ff6b6b);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .emergency-btn {
+        padding: 12px 30px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+    .emergency-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+    }
+    .emergency-info {
+        color: #d1d5db;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container emergency-container">
+    <div class="emergency-card">
+        <h1 class="emergency-title">Urgent Help Required</h1>
+        <p class="emergency-info lead">
+            If you are experiencing a medical emergency (e.g., severe chest pain, difficulty breathing, or loss of consciousness), 
+            please call emergency services immediately or contact a healthcare provider.
+        </p>
+        <p class="emergency-info">
+            Emergency Numbers: 
+            <strong>India: 108 or 102</strong> (varies by location, check your local emergency number).
+        </p>
+        <div class="mt-4">
+            <a href="tel:108" class="btn btn-danger emergency-btn me-3">Call Emergency</a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary emergency-btn" {% if not current_user.is_authenticated %}data-bs-toggle="modal" data-bs-target="#loginModal"{% endif %}>
+                Chat with AI Now
+            </a>
+        </div>
+        <p class="emergency-info mt-3">
+            For non-emergencies, describe your symptoms via the AI assistant to get immediate guidance.
+        </p>
+    </div>
+</div>
+
+<!-- Login Modal (if not authenticated) -->
+{% if not current_user.is_authenticated %}
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Login Required</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please log in to access the dashboard and chat with the AI assistant.</p>
+                <a href="{{ url_for('login') }}" class="btn btn-primary w-100 mb-2">Login</a>
+                <a href="{{ url_for('register') }}" class="btn btn-outline-light w-100">Register</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Ensure Bootstrap modal works
+    document.addEventListener('DOMContentLoaded', function () {
+        var loginModal = document.getElementById('loginModal');
+        if (loginModal) {
+            loginModal.addEventListener('show.bs.modal', function (event) {
+                // Triggered when the modal is shown
+            });
+        }
+    });
+</script>
+{% endblock %}
